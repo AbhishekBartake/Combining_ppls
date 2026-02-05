@@ -367,6 +367,7 @@
 						"referenceName": "Product_table",
 						"type": "DatasetReference",
 						"parameters": {
+							"SchemaName": "dbo",
 							"tableName": "dummytable"
 						}
 					}
@@ -519,8 +520,10 @@
 				}
 			},
 			{
-				"name": "ForEach2",
+				"name": "Loop_over_SQL_names",
 				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Search_table_names",
@@ -603,6 +606,8 @@
 			{
 				"name": "ForEach3",
 				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Get Metadata1",
@@ -683,6 +688,8 @@
 			{
 				"name": "Get Metadata1",
 				"type": "GetMetadata",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -708,6 +715,57 @@
 					"formatSettings": {
 						"type": "BinaryReadSettings"
 					}
+				}
+			},
+			{
+				"name": "Pass_parameters_to_databricks",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Search_table_names",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Search_table_names').output.value\n",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "ingesting_parquet_from_SQL_server",
+							"type": "DatabricksNotebook",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Users/abhishekbartake0850@gmail.com/ingesting_parquet_from_sql_server",
+								"baseParameters": {
+									"folder_name": {
+										"value": "@item().TABLE_NAME",
+										"type": "Expression"
+									},
+									"file_name": {
+										"value": "@item().TABLE_NAME",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LS_AzureDatabricks",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
 				}
 			}
 		],
