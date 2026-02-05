@@ -1,0 +1,30 @@
+{
+	"name": "Product_table",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "On_prem_SQL_server",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SchemaName": {
+				"type": "string",
+				"defaultValue": "dbo"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "dummytable"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@{dataset().SchemaName}.@{dataset().tableName}\n",
+				"type": "Expression"
+			},
+			"table": ""
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

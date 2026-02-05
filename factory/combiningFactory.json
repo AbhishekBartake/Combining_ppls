@@ -1,0 +1,9 @@
+{
+	"name": "combiningFactory",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "3bc067ae-c3d3-461b-822d-c292af34446f",
+		"tenantId": "ae2c5bfb-ab7e-4c29-a1e4-938d8760fb34"
+	}
+}
